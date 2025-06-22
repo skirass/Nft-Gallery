@@ -10,12 +10,16 @@
       --text: #000000;
       --header-bg: #eeeeee;
       --header-text: #000000;
+      --nft-bg: #f9f9f9;
+      --nft-text: #000000;
     }
     body.dark {
       --bg: #111111;
       --text: #ffffff;
       --header-bg: #7e7e7e;
       --header-text: #ffffff;
+      --nft-bg: #dddddd;
+      --nft-text: #000000;
     }
     body {
       font-family: Arial, sans-serif;
@@ -59,6 +63,19 @@
       color: inherit;
       text-decoration: none;
     }
+	.nft {
+  border: 1px solid #ccc;
+  padding: 1rem;
+  background: var(--nft-bg);
+  color: var(--nft-text);
+  transition: background 0.3s, color 0.3s;
+}
+
+	.nft p {
+  margin-top: 0.5rem;
+  color: var(--nft-text);
+}
+
   </style>
 </head>
 <body>
