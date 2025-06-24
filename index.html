@@ -1,189 +1,78 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>NFT Showcase</title>
-  <link rel="icon" type="image/png" href="favicon.png" />
-  <style>
-    :root {
-      --bg: #f5f5f5;
-      --text: #000000;
-      --header-bg: #eeeeee;
-      --header-text: #000000;
-      --nft-bg: #f9f9f9;
-      --nft-text: #000000;
-    }
-    body.dark {
-      --bg: #111111;
-      --text: #ffffff;
-      --header-bg: #7e7e7e;
-      --header-text: #ffffff;
-      --nft-bg: #dddddd;
-      --nft-text: #000000;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0; padding: 0;
-      background: var(--bg); color: var(--text);
-      transition: background 0.3s, color 0.3s;
-    }
-    header {
-      padding: 1rem;
-      text-align: center;
-      background: var(--header-bg);
-      color: var(--header-text);
-      transition: background 0.3s, color 0.3s;
-    }
-    .toggle-button {
-      margin-top: 10px;
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-    }
-    section {
-      padding: 2rem;
-    }
-    h2 {
-      margin-top: 2rem;
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-    .nft {
-      border: 1px solid #ccc;
-      padding: 1rem;
-      background: #f9f9f9;
-    }
-    .nft img {
-      width: 100%;
-      height: auto;
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-	.nft {
-  border: 1px solid #ccc;
-  padding: 1rem;
-  background: var(--nft-bg);
-  color: var(--nft-text);
-  transition: background 0.3s, color 0.3s;
-}
-
-	.nft p {
-  margin-top: 0.5rem;
-  color: var(--nft-text);
-}
-
-  </style>
+    <title>NFT Map of Uzbekistan</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 100vh; }
+        .popup-img { width: 200px; height: auto; display: block; margin: 5px 0; }
+        #langBtn { position: absolute; top: 10px; right: 10px; z-index: 1000; padding: 5px 10px; background: white; border: 1px solid gray; cursor: pointer; }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>NFT Showcase</h1>
-    <button class="toggle-button" onclick="toggleTheme()">Toggle Dark/Light Mode</button>
-  </header>
 
-  <section>
-    <h2>Neon Tashkent</h2>
-    <div class="gallery" id="neon"></div>
+<button id="langBtn">Русский</button>
+<div id="map"></div>
 
-    <h2>Samarkand Historic</h2>
-    <div class="gallery" id="samarkand"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+    var map = L.map('map').setView([41.3, 64.4], 6);
 
-    <h2>Uzbekistan</h2>
-    <div class="gallery" id="uzbekistan"></div>
-  </section>
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 18,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-  <script>
-    const nftData = {
-      neon: [
+    var currentLang = 'en';
+
+    var nftData = [
         {
-          name: "Tashkent Tower — Neon Skyline Edition",
-          image: "https://i2.seadn.io/polygon/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/92559c2ee996223e5ee73386637d17/8092559c2ee996223e5ee73386637d17.png?w=1000",
-          link: "https://opensea.io/item/matic/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/1"
+            title_en: "Kalta Minor Minaret",
+            title_ru: "Минорет Калта Минор",
+            img: "https://i2.seadn.io/ethereum/0x831276c4ccdd098b0a903bfe4e43cc409e924182/a52f42e9b3588bba75b8d95811d97a/68a52f42e9b3588bba75b8d95811d97a.png?w=1000",
+            link: "https://opensea.io/item/ethereum/0x831276c4ccdd098b0a903bfe4e43cc409e924182/2",
+            coords: [41.37834886651419, 60.35799374464668]
         },
         {
-          name: "Minor Mosque — Tashkent",
-          image: "https://i2.seadn.io/polygon/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/2ac72dc7a5ba6a2bda5e852b9a4408/bf2ac72dc7a5ba6a2bda5e852b9a4408.png?w=1000",
-          link: "https://opensea.io/item/matic/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/2"
-        },
-        {
-          name: "Hotel Uzbekistan",
-          image: "https://i2.seadn.io/polygon/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/6a4c8cbb1e4b3dc107f8fbd1692d22/8c6a4c8cbb1e4b3dc107f8fbd1692d22.png?w=1000",
-          link: "https://opensea.io/item/matic/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/3"
-        },
-        {
-          name: "Nest One — Tashkent",
-          image: "https://i2.seadn.io/polygon/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/8d279cacb44116d770ea148708e382/888d279cacb44116d770ea148708e382.png?w=1000",
-          link: "https://opensea.io/item/matic/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/4"
-        },
-        {
-          name: "Amir Temur Museum – Tashkent",
-          image: "https://i2.seadn.io/polygon/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/9c08af0e60d2292b49edf549fd53b9/809c08af0e60d2292b49edf549fd53b9.png?w=1000",
-          link: "https://opensea.io/item/matic/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/5"
-        },
-        {
-          name: "Ministry of Finance – Tashkent",
-          image: "https://i2.seadn.io/polygon/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/841ddfdaf6a7afb59f85d4b7ac1985/c7841ddfdaf6a7afb59f85d4b7ac1985.png?w=1000",
-          link: "https://opensea.io/item/matic/0xcc76fef392c5b1fe1e36fc6e8af6e71ec3f7d5b0/6"
+            title_en: "Monument of Courage: Tashkent 1966",
+            title_ru: "Монумент Мужества: Ташкент 1966",
+            img: "https://i2.seadn.io/ethereum/0x831276c4ccdd098b0a903bfe4e43cc409e924182/e93d3044190dbcd68ee99972e00e12/6ce93d3044190dbcd68ee99972e00e12.png?w=1000",
+            link: "https://opensea.io/item/ethereum/0x831276c4ccdd098b0a903bfe4e43cc409e924182/1",
+            coords: [41.323606854900525, 69.27268592636344]
         }
-      ],
-      samarkand: [
-        {
-          name: "Sher-Dor Madrasah – Through the Gate",
-          image: "https://i2.seadn.io/polygon/0xdfd82778b8dc41fc4c6bdabacaa066785258f400/a9f54f23cac153887018e7166bd19b/f7a9f54f23cac153887018e7166bd19b.jpeg?w=1000",
-          link: "https://opensea.io/item/matic/0xdfd82778b8dc41fc4c6bdabacaa066785258f400/2"
-        },
-        {
-          name: "Ulugh Beg Madrasah at Night – Samarkand Historic #1",
-          image: "https://i2.seadn.io/polygon/0xdfd82778b8dc41fc4c6bdabacaa066785258f400/971677282d009d5b1025da2ecc412d/f2971677282d009d5b1025da2ecc412d.jpeg?w=1000",
-          link: "https://opensea.io/item/matic/0xdfd82778b8dc41fc4c6bdabacaa066785258f400/1"
-        },
-        {
-          name: "Tilla-Kari at Twilight – Samarkand Historic #3",
-          image: "https://i2.seadn.io/polygon/0xdfd82778b8dc41fc4c6bdabacaa066785258f400/492424912ad957c943ffb2746ab672/3e492424912ad957c943ffb2746ab672.jpeg?w=1000",
-          link: "https://opensea.io/item/matic/0xdfd82778b8dc41fc4c6bdabacaa066785258f400/3"
-        }
-      ],
-      uzbekistan: [
-        {
-          name: "Kalta Minor Minaret",
-          image: "https://i2.seadn.io/ethereum/0x831276c4ccdd098b0a903bfe4e43cc409e924182/a52f42e9b3588bba75b8d95811d97a/68a52f42e9b3588bba75b8d95811d97a.png?w=1000",
-          link: "https://opensea.io/item/ethereum/0x831276c4ccdd098b0a903bfe4e43cc409e924182/2"
-        },
-        {
-          name: "Monument of Courage: Tashkent 1966",
-          image: "https://i2.seadn.io/ethereum/0x831276c4ccdd098b0a903bfe4e43cc409e924182/e93d3044190dbcd68ee99972e00e12/6ce93d3044190dbcd68ee99972e00e12.png?w=1000",
-          link: "https://opensea.io/item/ethereum/0x831276c4ccdd098b0a903bfe4e43cc409e924182/1"
-        }
-      ]
-    };
+        // остальные NFT добавляются аналогично
+    ];
 
-    function renderNFTs(collectionId, targetId) {
-      const container = document.getElementById(targetId);
-      nftData[collectionId].forEach(nft => {
-        const div = document.createElement("div");
-        div.className = "nft";
-        div.innerHTML = `
-          <a href="${nft.link}" target="_blank">
-            <img src="${nft.image}" alt="${nft.name}">
-            <p>${nft.name}</p>
-          </a>
+    nftData.forEach(function(nft) {
+        L.marker(nft.coords).addTo(map)
+            .bindPopup(generatePopup(nft));
+    });
+
+    function generatePopup(nft) {
+        var title = (currentLang === 'ru') ? nft.title_ru : nft.title_en;
+        var btnText = (currentLang === 'ru') ? 'Посмотреть NFT' : 'View NFT';
+        return `
+            <b>${title}</b><br>
+            <img class="popup-img" src="${nft.img}" /><br>
+            <a href="${nft.link}" target="_blank">${btnText}</a>
         `;
-        container.appendChild(div);
-      });
     }
 
-    // Render all
-    renderNFTs("neon", "neon");
-    renderNFTs("samarkand", "samarkand");
-    renderNFTs("uzbekistan", "uzbekistan");
+    document.getElementById('langBtn').addEventListener('click', function() {
+        currentLang = (currentLang === 'en') ? 'ru' : 'en';
+        this.textContent = (currentLang === 'en') ? 'Русский' : 'English';
+        map.eachLayer(function(layer) {
+            if (layer.getPopup && layer.getPopup()) {
+                var nft = nftData.find(d => layer.getLatLng().lat.toFixed(4) == d.coords[0].toFixed(4) && layer.getLatLng().lng.toFixed(4) == d.coords[1].toFixed(4));
+                if (nft) {
+                    layer.setPopupContent(generatePopup(nft));
+                }
+            }
+        });
+    });
+</script>
 
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
-    }
-  </script>
 </body>
 </html>
